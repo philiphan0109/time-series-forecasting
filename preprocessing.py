@@ -10,6 +10,9 @@ def process_file(path):
         f'low_freq_error_var_{loc}', f'bias_error_var_{loc}', f'diag_var1_{loc}', f'diag_var2_{loc}', f'diag_var3_{loc}'
     ]
 
+    df = df.drop(columns=[f'diag_var1_{loc}', f'diag_var2_{loc}', f'diag_var3_{loc}', f'total_error_var_{loc}', f'high_freq_error_var_{loc}',
+        f'low_freq_error_var_{loc}', f'bias_error_var_{loc}'])
+
     return df
 
 data_path = "data/"
