@@ -25,10 +25,24 @@ for file in os.listdir(data_path):
         loc_df = process_file(file_path)
 
 
-    print(file, len(loc_df))
+    # print(file, len(loc_df))
     if len(all_data) == 0:
         all_data = loc_df
     else:
         all_data = pd.merge(all_data, loc_df, on = ["year", "month"])
 
-all_data.to_csv('data/processed_data.csv', index=False)
+# all_data.to_csv('data/processed_data.csv', index=False)
+
+segments = []
+start_year = all_data['year'].min()
+end_year = all_data['year'].max()
+
+for year in range(start_year, end_year, 11):
+    # Get the subset of data for the current 11-year segment
+    segment_end = min(year + 11, end_year + 1)  # Ensure we don't go beyond the last year
+    segment_df = all_data[(all_data['year'] >= year) & (all_data['year'] < segment_end)]
+    
+    if not segment_df.empty:
+        segments.append(segment_df)
+
+print(segments[0].shape)
