@@ -79,7 +79,6 @@ class MultiHeadCrossAttention(nn.Module):
         return out
     
 # Positional Encoding
-
 class PositionalEncoding(nn.Module):
     def __init__(self, d_model, max_sequence_len):
         super().__init__()
