@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-from model import Transformer # this is the transformer.py file
+from model import Transformer
 import torch
 from torch import nn
 import numpy as np

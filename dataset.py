@@ -10,4 +10,3 @@ class TimeSeriesDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.input_tensors[idx], self.target_tensors[idx]
-
