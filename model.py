@@ -119,7 +119,6 @@ class LayerNormalization(nn.Module):
         return out
 
 # Feed Forward Layer
-
 class PositionWiseFeedForward(nn.Module):
     def __init__(self, d_model, hidden, drop_prob = 0.1):
         super(PositionWiseFeedForward, self).__init__()
@@ -136,7 +135,6 @@ class PositionWiseFeedForward(nn.Module):
         return x
 
 # Encoder
-
 class EncoderLayer(nn.Module):
     def __init__(self, d_model, ffn_hidden, num_heads, drop_prob):
         super(EncoderLayer, self).__init__() 
@@ -169,7 +167,6 @@ class Encoder(nn.Module):
         return x
 
 # Decoder
-
 class DecoderLayer(nn.Module):
     def __init__(self, d_model, ffn_hidden, num_heads, drop_prob) -> None:
         super(DecoderLayer, self).__init__()
