@@ -231,6 +231,7 @@ class Transformer(nn.Module):
                 ):
         super().__init__()
         self.encoder = Encoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.encoder_1 = Encoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers)
         self.decoder = Decoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers)
         self.linear = nn.Linear(d_model, d_model)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
