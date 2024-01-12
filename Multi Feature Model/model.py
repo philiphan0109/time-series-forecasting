@@ -136,8 +136,9 @@ class PositionWiseFeedForward(nn.Module):
 
 # Encoder
 class EncoderLayer(nn.Module):
-    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob):
+    def __init__(self, d_model, d_data, ffn_hidden, num_heads, drop_prob):
         super(EncoderLayer, self).__init__() 
+        self.input_embedding = nn.Linear(in_features=d_data, out_features=d_model)
         self.attention = MultiHeadAttention(d_model = d_model, num_heads=num_heads)
         self.norm1 = LayerNormalization(parameter_shape=[d_model])
         self.dropout1 = nn.Dropout(p = drop_prob)
@@ -146,6 +147,7 @@ class EncoderLayer(nn.Module):
         self.dropout2 = nn.Dropout(p = drop_prob)
     
     def forward(self, x):
+        x = self.input_embedding(x)
         resid_x = x
         x = self.attention(x, mask = None)
         x = self.dropout1(x)
@@ -158,9 +160,9 @@ class EncoderLayer(nn.Module):
     
 
 class Encoder(nn.Module):
-    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob, num_layers):
+    def __init__(self, d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers):
         super().__init__()
-        self.layers = nn.Sequential(*[EncoderLayer(d_model, ffn_hidden, num_heads, drop_prob) for _ in range(num_layers)])
+        self.layers = nn.Sequential(*[EncoderLayer(d_model, d_data, ffn_hidden, num_heads, drop_prob) for _ in range(num_layers)])
     
     def forward(self, x):
         x = self.layers(x)
@@ -168,8 +170,9 @@ class Encoder(nn.Module):
 
 # Decoder
 class DecoderLayer(nn.Module):
-    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob) -> None:
+    def __init__(self, d_model, d_data, ffn_hidden, num_heads, drop_prob) -> None:
         super(DecoderLayer, self).__init__()
+        self.target_embedding = nn.Linear(in_features=d_data, out_features=d_model)
         self.self_attention = MultiHeadAttention(d_model=d_model, num_heads=num_heads)
         self.norm1 = LayerNormalization(parameter_shape=[d_model])
         self.dropout1 = nn.Dropout(p = drop_prob)
@@ -183,6 +186,8 @@ class DecoderLayer(nn.Module):
         self.dropout3 = nn.Dropout(p = drop_prob)
     
     def forward(self, x, y, decoder_mask):
+        y = self.target_embedding(y)
+
         resid_y = y
         y = self.self_attention(y, mask = decoder_mask)
         y = self.dropout1(y)
@@ -208,9 +213,9 @@ class SequentialDecoder(nn.Sequential):
         return y
 
 class Decoder(nn.Module):
-    def __init__(self, d_model, ffn_hidden, num_heads, drop_prob, num_layers) -> None:
+    def __init__(self, d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers) -> None:
         super().__init__()
-        self.layers = SequentialDecoder(*[DecoderLayer(d_model, ffn_hidden, num_heads, drop_prob) for _ in range(num_layers)])
+        self.layers = SequentialDecoder(*[DecoderLayer(d_model, d_data, ffn_hidden, num_heads, drop_prob) for _ in range(num_layers)])
 
     def forward(self, x, y, mask):
         # x: 30 * 200 * 512
@@ -224,16 +229,16 @@ class Decoder(nn.Module):
 class Transformer(nn.Module):
     def __init__(self, 
                 d_model, 
+                d_data, 
                 ffn_hidden, 
                 num_heads, 
                 drop_prob, 
                 num_layers,
                 ):
         super().__init__()
-        self.encoder = Encoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.encoder_1 = Encoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.decoder = Decoder(d_model, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.linear = nn.Linear(d_model, d_model)
+        self.encoder = Encoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.decoder = Decoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.linear = nn.Linear(d_model, d_data)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     def forward(self, x, y): # x, y are batch of temperatures
