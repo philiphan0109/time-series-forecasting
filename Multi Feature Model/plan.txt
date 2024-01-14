@@ -1,4 +1,0 @@
-
-
-Current data: batch size * 120 (months) * 15 (locations) - temperature variance
-New data: 
