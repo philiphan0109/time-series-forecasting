@@ -227,12 +227,12 @@ class Decoder(nn.Module):
 # Full transformer
 
 class Transformer(nn.Module):
-    def __init__(self, 
-                d_model, 
-                d_data, 
-                ffn_hidden, 
-                num_heads, 
-                drop_prob, 
+    def __init__(self,
+                d_model,
+                d_data,
+                ffn_hidden,
+                num_heads,
+                drop_prob,
                 num_layers,
                 num_encoders = 2
                 ):
