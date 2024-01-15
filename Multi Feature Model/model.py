@@ -234,18 +234,46 @@ class Transformer(nn.Module):
                 num_heads, 
                 drop_prob, 
                 num_layers,
+                num_encoders = 2
                 ):
         super().__init__()
-        self.encoder = Encoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.temp_encoder = Encoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.precip_encoder = Encoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
         self.decoder = Decoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
+
+        self.x_projection = nn.Linear(num_encoders * d_model, d_model)
+        self.y_projection = nn.Linear(num_encoders * d_model, d_model)
+
+
         self.linear = nn.Linear(d_model, d_data)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
-    def forward(self, x, y): # x, y are batch of temperatures
+    def forward(self, x, y):
         mask = (torch.triu(torch.ones(12, 12)) == 1).transpose(0, 1)
         mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
 
-        x = self.encoder(x)
-        out = self.decoder(x, y, mask)
+
+        # x is now [batch_size * num_data_types * months * num_features]
+        temp_x = x[:, 0, :, :]
+        precip_x = x[:, 1, :, :]
+
+        temp_x = self.temp_encoder(temp_x)
+        precip_x = self.precip_encoder(precip_x)
+
+        # Concatenate the two together
+        combined_x = torch.cat([temp_x, precip_x], dim=-1)
+        projected_x = self.x_projection(combined_x)
+
+
+        # y is now also [batch_size * num_data_types * months * num_features]
+        temp_y = y[:, 0, :, :]
+        precip_y = y[:, 1, :, :]
+
+        # Add any necessary processing for y if required
+        combined_y = torch.cat([temp_y, precip_y], dim=-1)
+        projected_y = self.y_projection(combined_y)
+
+
+        out = self.decoder(projected_x, projected_y, mask)
         out = self.linear(out)
         return out
