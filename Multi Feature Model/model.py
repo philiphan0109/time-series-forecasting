@@ -229,7 +229,9 @@ class Decoder(nn.Module):
 class Transformer(nn.Module):
     def __init__(self,
                 d_model,
-                d_data,
+                d_temp,
+                d_precip,
+                d_out,
                 ffn_hidden,
                 num_heads,
                 drop_prob,
@@ -237,15 +239,16 @@ class Transformer(nn.Module):
                 num_encoders = 2
                 ):
         super().__init__()
-        self.temp_encoder = Encoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.precip_encoder = Encoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.decoder = Decoder(d_model, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.temp_encoder = Encoder(d_model, d_temp, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.precip_encoder = Encoder(d_model, d_precip, ffn_hidden, num_heads, drop_prob, num_layers)
+
+        self.decoder = Decoder(d_model, d_out, ffn_hidden, num_heads, drop_prob, num_layers)
 
         self.x_projection = nn.Linear(num_encoders * d_model, d_model)
-        self.y_projection = nn.Linear(num_encoders * d_model, d_model)
+        self.y_projection = nn.Linear(d_out, d_model)
 
 
-        self.linear = nn.Linear(d_model, d_data)
+        self.linear = nn.Linear(d_model, d_out)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     def forward(self, x, y):
@@ -254,8 +257,8 @@ class Transformer(nn.Module):
 
 
         # x is now [batch_size * num_data_types * months * num_features]
-        temp_x = x[:, 0, :, :]
-        precip_x = x[:, 1, :, :]
+        temp_x = x[:, :, 0, :]
+        precip_x = x[:, :, 1, :]
 
         temp_x = self.temp_encoder(temp_x)
         precip_x = self.precip_encoder(precip_x)
@@ -265,13 +268,8 @@ class Transformer(nn.Module):
         projected_x = self.x_projection(combined_x)
 
 
-        # y is now also [batch_size * num_data_types * months * num_features]
-        temp_y = y[:, 0, :, :]
-        precip_y = y[:, 1, :, :]
-
         # Add any necessary processing for y if required
-        combined_y = torch.cat([temp_y, precip_y], dim=-1)
-        projected_y = self.y_projection(combined_y)
+        projected_y = self.y_projection(y)
 
 
         out = self.decoder(projected_x, projected_y, mask)
