@@ -228,10 +228,11 @@ class Decoder(nn.Module):
 
 class Transformer(nn.Module):
     def __init__(self,
-                d_model,
+                d_enc,
+                d_dec,
+                d_data,
                 d_temp,
                 d_precip,
-                d_out,
                 ffn_hidden,
                 num_heads,
                 drop_prob,
@@ -239,16 +240,14 @@ class Transformer(nn.Module):
                 num_encoders = 2
                 ):
         super().__init__()
-        self.temp_encoder = Encoder(d_model, d_temp, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.precip_encoder = Encoder(d_model, d_precip, ffn_hidden, num_heads, drop_prob, num_layers)
+        
+        self.temp_encoder = Encoder(d_enc, d_temp, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.precip_encoder = Encoder(d_enc, d_precip, ffn_hidden, num_heads, drop_prob, num_layers)
 
-        self.decoder = Decoder(d_model, d_out, ffn_hidden, num_heads, drop_prob, num_layers)
-
-        self.x_projection = nn.Linear(num_encoders * d_model, d_model)
-        self.y_projection = nn.Linear(d_out, d_model)
+        self.decoder = Decoder(d_dec, d_dec, ffn_hidden, num_heads, drop_prob, num_layers)
 
 
-        self.linear = nn.Linear(d_model, d_out)
+        self.linear = nn.Linear(d_dec, d_data)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     def forward(self, x, y):
@@ -265,13 +264,13 @@ class Transformer(nn.Module):
 
         # Concatenate the two together
         combined_x = torch.cat([temp_x, precip_x], dim=-1)
-        projected_x = self.x_projection(combined_x)
-
 
         # Add any necessary processing for y if required
-        projected_y = self.y_projection(y)
+        temp_y = y[:, :, 0, :]
+        precip_y = y[:, :, 1, :]
+        
+        combined_y = torch.cat([temp_y, precip_y], dim = -1)
 
-
-        out = self.decoder(projected_x, projected_y, mask)
+        out = self.decoder(combined_x, combined_y, mask)
         out = self.linear(out)
         return out
