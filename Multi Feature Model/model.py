@@ -246,14 +246,12 @@ class Transformer(nn.Module):
 
         self.decoder = Decoder(d_dec, d_dec, ffn_hidden, num_heads, drop_prob, num_layers)
 
-
         self.linear = nn.Linear(d_dec, d_data)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     def forward(self, x, y):
         mask = (torch.triu(torch.ones(12, 12)) == 1).transpose(0, 1)
         mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
-
 
         # x is now [batch_size * num_data_types * months * num_features]
         temp_x = x[:, :, 0, :]
