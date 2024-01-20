@@ -232,7 +232,7 @@ class Transformer(nn.Module):
                 d_dec,
                 d_data,
                 d_temp,
-                d_precip,
+                d_ghg,
                 ffn_hidden,
                 num_heads,
                 drop_prob,
@@ -242,7 +242,7 @@ class Transformer(nn.Module):
         super().__init__()
         
         self.temp_encoder = Encoder(d_enc, d_temp, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.precip_encoder = Encoder(d_enc, d_precip, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.precip_encoder = Encoder(d_enc, d_ghg, ffn_hidden, num_heads, drop_prob, num_layers)
 
         self.decoder = Decoder(d_dec, d_dec, ffn_hidden, num_heads, drop_prob, num_layers)
 
