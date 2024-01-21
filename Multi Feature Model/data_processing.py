@@ -24,9 +24,7 @@ def create_segments(data, input_years_length, target_years_length, overlapping =
     input_data = []
     target_data = []
     
-    input_months = input_years_length * 12
-    target_months = target_years_length * 12
-    total_months = input_months + target_months
+    total_years = input_years_length + target_years_length
 
     start_year = data['year'].min()
     end_year = data['year'].max()
@@ -34,15 +32,15 @@ def create_segments(data, input_years_length, target_years_length, overlapping =
     if overlapping:
         step = 1
     else:
-        step = input_years_length + target_years_length
+        step = total_years
 
-    for year in range(start_year, end_year - input_years_length - target_years_length + 1, step):
-        segment_end_year = year + input_years_length + target_years_length
+    for year in range(start_year, end_year - total_years + 2, step):
+        segment_end_year = year + total_years
         segment_df = data[(data['year'] >= year) & (data['year'] < segment_end_year)]
 
         if not segment_df.empty:
-            input_segment = segment_df[:input_months]
-            target_segment = segment_df[input_months:total_months]
+            input_segment = segment_df.head(input_years_length)
+            target_segment = segment_df.tail(target_years_length)
             input_data.append(input_segment)
             target_data.append(target_segment)
 
