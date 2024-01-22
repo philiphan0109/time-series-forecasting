@@ -242,9 +242,9 @@ class Transformer(nn.Module):
         super().__init__()
         
         self.temp_encoder = Encoder(d_enc, d_temp, ffn_hidden, num_heads, drop_prob, num_layers)
-        self.precip_encoder = Encoder(d_enc, d_ghg, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.ghg_encoder = Encoder(d_enc, d_ghg, ffn_hidden, num_heads, drop_prob, num_layers)
 
-        self.decoder = Decoder(d_dec, d_dec, ffn_hidden, num_heads, drop_prob, num_layers)
+        self.decoder = Decoder(d_dec, d_data, ffn_hidden, num_heads, drop_prob, num_layers)
 
         self.linear = nn.Linear(d_dec, d_data)
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -254,20 +254,21 @@ class Transformer(nn.Module):
         mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
 
         # x is now [batch_size * num_data_types * months * num_features]
-        temp_x = x[:, :, 0, :]
-        precip_x = x[:, :, 1, :]
+        temp_x = x[:, 0, :, :]
+        ghg_x = x[:, 1, :, :]
 
+        
         temp_x = self.temp_encoder(temp_x)
-        precip_x = self.precip_encoder(precip_x)
+        ghg_x = self.ghg_encoder(ghg_x)
 
         # Concatenate the two together
-        combined_x = torch.cat([temp_x, precip_x], dim=-1)
+        combined_x = torch.cat([temp_x, ghg_x], dim=-1)
 
         # Add any necessary processing for y if required
-        temp_y = y[:, :, 0, :]
-        precip_y = y[:, :, 1, :]
-        
-        combined_y = torch.cat([temp_y, precip_y], dim = -1)
+        temp_y = y[:, 0, :, :]
+        ghg_y = y[:, 1, :, :]
+
+        combined_y = torch.cat([temp_y, ghg_y], dim = -1)
 
         out = self.decoder(combined_x, combined_y, mask)
         out = self.linear(out)
