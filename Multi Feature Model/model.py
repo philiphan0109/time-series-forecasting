@@ -250,7 +250,7 @@ class Transformer(nn.Module):
         self.device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     def forward(self, x, y):
-        mask = (torch.triu(torch.ones(12, 12)) == 1).transpose(0, 1)
+        mask = (torch.triu(torch.ones(5, 5)) == 1).transpose(0, 1)
         mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
 
         # x is now [batch_size * num_data_types * months * num_features]
