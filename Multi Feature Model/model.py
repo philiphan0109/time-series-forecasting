@@ -256,7 +256,6 @@ class Transformer(nn.Module):
         # x is now [batch_size * num_data_types * months * num_features]
         temp_x = x[:, 0, :, :]
         ghg_x = x[:, 1, :, :]
-
         
         temp_x = self.temp_encoder(temp_x)
         ghg_x = self.ghg_encoder(ghg_x)
