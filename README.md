@@ -1,7 +1,7 @@
 # EcoCast: Global Climate Forecasting with Transformers
 
 <p align="center">
-  <img src="/Diagrams/modelarchitecture.jpeg" alt="Climate Forecasting Visualization">
+  <img src="/Diagrams/architecture.jpeg" alt="Climate Forecasting Visualization">
   <br>
   <em>Visual representation of climate forecasting model predictions.</em>
 </p>
