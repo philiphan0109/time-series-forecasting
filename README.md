@@ -10,7 +10,7 @@ This project harnesses advanced transformer-based models to forecast global clim
 
 ## Single-shot vs. Autoregressive Prediction
 <p align="center">
-  <img src="/Diagrams/singshotvautoregressive.jpeg" alt="Single-shot vs. Autoregressive Prediction">
+  <img src="/Diagrams/singleshotvautoregressive.jpeg" alt="Single-shot vs. Autoregressive Prediction">
   <br>
   <em>Single-Shot vs. Autoregressive Prediction Process.</em>
 </p>
