@@ -8,6 +8,13 @@
 
 This project harnesses advanced transformer-based models to forecast global climate trends using time series data from significant sources like NOAAGlobalTemp and CO2 Emissions. Through innovative approaches in single-shot and autoregressive models, along with single-task and multi-task learning, we aim to enhance prediction accuracy and reliability, offering a new benchmark for environmental forecasting.
 
+## Single-shot vs. Autoregressive Prediction
+<p align="center">
+  <img src="/Diagrams/segmentation.jpeg" alt="Single-shot vs. Autoregressive Prediction">
+  <br>
+  <em>Single-Shot vs. Autoregressive Prediction Process.</em>
+</p>
+
 ## Preprocessing: Overlapping Data
 <p align="center">
   <img src="/Diagrams/segmentation.jpeg" alt="Climate Forecasting Visualization">
