@@ -35,3 +35,10 @@ This project harnesses advanced transformer-based models to forecast global clim
   <br>
   <em>Comparison of Single-shot and Autoregressive Performances.</em>
 </p>
+
+## Single-Task vs. Multi-Task Learning
+<p align="center">
+  <img src="Multi Feature Model/figures/Single & Multi-Task Model Comparison.jpg" alt="Climate Forecasting Visualization">
+  <br>
+  <em>Comparison of Single-task and Multi-task Performances.</em>
+</p>
