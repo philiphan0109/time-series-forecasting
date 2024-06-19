@@ -21,3 +21,10 @@ This project harnesses advanced transformer-based models to forecast global clim
   <br>
   <em>Visual representation of data segmentation, with and without overlapping data.</em>
 </p>
+
+## Informer Comparison
+<p align="center">
+  <img src="/Single Feature Model/figures/Informer Comparison.jpg" alt="Climate Forecasting Visualization">
+  <br>
+  <em>Comparison of Informer Model Performances.</em>
+</p>
