@@ -28,3 +28,10 @@ This project harnesses advanced transformer-based models to forecast global clim
   <br>
   <em>Comparison of Informer Model Performances.</em>
 </p>
+
+## Single-Shot vs. Autoregressive Comparison
+<p align="center">
+  <img src="/Single Feature Model/figures/Single-Shot & Autoregressive Comparison.jpg" alt="Climate Forecasting Visualization">
+  <br>
+  <em>Comparison of Single-shot and Autoregressive Performances.</em>
+</p>
