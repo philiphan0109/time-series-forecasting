@@ -42,3 +42,10 @@ This project harnesses advanced transformer-based models to forecast global clim
   <br>
   <em>Comparison of Single-task and Multi-task Performances.</em>
 </p>
+
+## Model Size
+<p align="center">
+  <img src="Single Feature Model/figures/Model Size Comparison.jpg" alt="Climate Forecasting Visualization">
+  <br>
+  <em>Comparison of model sizes and performance.</em>
+</p>
