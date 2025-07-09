@@ -1,7 +1,7 @@
 # EcoCast: Global Climate Forecasting with Transformers
 
 <p align="center">
-  <img src="/Diagrams/architecture.jpeg" alt="Climate Forecasting Visualization">
+  <img src="/figs/architecture.jpeg" alt="Climate Forecasting Visualization">
   <br>
   <em>Visual representation of climate forecasting model predictions.</em>
 </p>
@@ -20,14 +20,14 @@ This project harnesses advanced transformer-based models to forecast global clim
 
 ## Single-shot vs. Autoregressive Prediction
 <p align="center">
-  <img src="/Diagrams/singleshotvautoregressive.jpeg" alt="Single-shot vs. Autoregressive Prediction">
+  <img src="/figs/singleshotvautoregressive.jpeg" alt="Single-shot vs. Autoregressive Prediction">
   <br>
   <em>Single-Shot vs. Autoregressive Prediction Process.</em>
 </p>
 
 ## Preprocessing: Overlapping Data
 <p align="center">
-  <img src="/Diagrams/segmentation.jpeg" alt="Climate Forecasting Visualization">
+  <img src="/figs/segmentation.jpeg" alt="Climate Forecasting Visualization">
   <br>
   <em>Visual representation of data segmentation, with and without overlapping data.</em>
 </p>
