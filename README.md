@@ -34,28 +34,28 @@ This project harnesses advanced transformer-based models to forecast global clim
 
 ## Informer Comparison
 <p align="center">
-  <img src="/Single Feature Model/figures/Informer Comparison.jpg" alt="Climate Forecasting Visualization">
+  <img src="/single_feature_model/figures/Informer Comparison.jpg" alt="Climate Forecasting Visualization">
   <br>
   <em>Comparison of Informer Model Performances.</em>
 </p>
 
 ## Single-Shot vs. Autoregressive Comparison
 <p align="center">
-  <img src="/Single Feature Model/figures/Single-Shot & Autoregressive Comparison.jpg" alt="Climate Forecasting Visualization">
+  <img src="/single_feature_model/figures/Single-Shot & Autoregressive Comparison.jpg" alt="Climate Forecasting Visualization">
   <br>
   <em>Comparison of Single-shot and Autoregressive Performances.</em>
 </p>
 
 ## Single-Task vs. Multi-Task Learning
 <p align="center">
-  <img src="Multi Feature Model/figures/Single & Multi-Task Model Comparison.jpg" alt="Climate Forecasting Visualization">
+  <img src="multi_feature_model/figures/Single & Multi-Task Model Comparison.jpg" alt="Climate Forecasting Visualization">
   <br>
   <em>Comparison of Single-task and Multi-task Performances.</em>
 </p>
 
 ## Model Size
 <p align="center">
-  <img src="Single Feature Model/figures/Model Size Comparison.jpg" alt="Climate Forecasting Visualization">
+  <img src="single_feature_model/figures/Model Size Comparison.jpg" alt="Climate Forecasting Visualization">
   <br>
   <em>Comparison of model sizes and performance.</em>
 </p>
